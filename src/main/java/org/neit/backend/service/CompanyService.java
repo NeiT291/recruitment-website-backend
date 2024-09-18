@@ -2,24 +2,32 @@ package org.neit.backend.service;
 
 import org.neit.backend.dto.request.CompanyRequest;
 import org.neit.backend.dto.response.CompanyResponse;
+import org.neit.backend.dto.response.ResultPaginationResponse;
 import org.neit.backend.entity.Company;
 import org.neit.backend.mapper.CompanyMapper;
+import org.neit.backend.mapper.ResultPaginationMapper;
 import org.neit.backend.repository.CompanyRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CompanyService {
     private final CompanyRepository companyRepository;
     private final CompanyMapper companyMapper;
+    private final ResultPaginationMapper resultPaginationMapper;
 
-    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper) {
+    public CompanyService(CompanyRepository companyRepository, CompanyMapper companyMapper, ResultPaginationMapper resultPaginationMapper) {
         this.companyRepository = companyRepository;
         this.companyMapper = companyMapper;
+        this.resultPaginationMapper = resultPaginationMapper;
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     public CompanyResponse create(CompanyRequest request){
         Company company = companyMapper.toCompany(request);
         return companyMapper.toCompanyResponse(companyRepository.save(company));
@@ -35,12 +43,25 @@ public class CompanyService {
     public void delete(Integer id){
         companyRepository.deleteById(id);
     }
-    public List<CompanyResponse> getByName(String request){
+    public ResultPaginationResponse getByName(String request, Optional<String> page, Optional<String> pageSize){
+        String sPage = page.orElse("");
+        String sPageSize = pageSize.orElse("10");
+        Pageable pageable = PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
+
         String[] words = request.split(" ");
         request = String.join(" ", words);
-        return companyRepository.findByNameIgnoreCaseContaining(request).stream().map(companyMapper::toCompanyResponse).toList();
+
+        Page<Company> companyPage = companyRepository.findByNameIgnoreCaseContaining(request, pageable);
+
+        return resultPaginationMapper.toResultPaginationResponse(companyPage);
     }
-    public List<CompanyResponse> getAll(){
-        return companyRepository.findAll().stream().map(companyMapper::toCompanyResponse).toList();
+    public ResultPaginationResponse getAll(Optional<String> page, Optional<String> pageSize){
+        String sPage = page.orElse("");
+        String sPageSize = pageSize.orElse("10");
+
+        Pageable pageable = PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
+        Page<Company> companyPage = companyRepository.findAll(pageable);
+
+        return resultPaginationMapper.toResultPaginationResponse(companyPage);
     }
 }

@@ -3,10 +3,14 @@ package org.neit.backend.controller;
 import org.neit.backend.dto.ApiResponse;
 import org.neit.backend.dto.request.CompanyRequest;
 import org.neit.backend.dto.response.CompanyResponse;
+import org.neit.backend.dto.response.ResultPaginationResponse;
 import org.neit.backend.service.CompanyService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/companies")
@@ -23,10 +27,13 @@ public class CompanyController {
         response.setData(companyService.create(request));
         return response;
     }
-    @GetMapping("/{name}")
-    public ApiResponse<List<CompanyResponse>> getByName(@PathVariable String name) {
-        ApiResponse<List<CompanyResponse>> response = new ApiResponse<>();
-        response.setData(companyService.getByName(name));
+    @GetMapping("/search")
+    public ApiResponse<ResultPaginationResponse> getByName(@RequestParam String name,
+                                                           @RequestParam("page") Optional<String> page,
+                                                           @RequestParam("pageSize") Optional<String> pageSize
+    ) {
+        ApiResponse<ResultPaginationResponse> response = new ApiResponse<>();
+        response.setData(companyService.getByName(name, page, pageSize));
         return response;
     }
     @PutMapping("/{id}")
@@ -41,10 +48,14 @@ public class CompanyController {
         companyService.delete(id);
         return response;
     }
-    @GetMapping
-    public ApiResponse<List<CompanyResponse>> getAll() {
-        ApiResponse<List<CompanyResponse>> response = new ApiResponse<>();
-        response.setData(companyService.getAll());
+    @GetMapping("/all")
+    public ApiResponse<ResultPaginationResponse> getAll(
+            @RequestParam("page") Optional<String> page,
+            @RequestParam("pageSize") Optional<String> pageSize
+            ) {
+
+        ApiResponse<ResultPaginationResponse> response = new ApiResponse<>();
+        response.setData(companyService.getAll(page, pageSize));
         return response;
     }
 }
