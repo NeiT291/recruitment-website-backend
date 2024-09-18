@@ -51,6 +51,12 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    public UserResponse update(UserCreateRequest request){
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        userMapper.updateUser(user, request);
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();

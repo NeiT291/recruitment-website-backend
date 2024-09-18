@@ -48,7 +48,12 @@ public class UserController {
         response.setMessage("Create user successful");
         return response;
     }
-
+    @PutMapping
+    public ApiResponse<UserResponse> update(@RequestBody UserCreateRequest request){
+        ApiResponse<UserResponse> response = new ApiResponse<>();
+        response.setData(userService.update(request));
+        return response;
+    }
     @GetMapping
     public ApiResponse<List<UserResponse>> getAll() {
         ApiResponse<List<UserResponse>> response = new ApiResponse<>();

@@ -29,4 +29,11 @@ public class UserMapper {
         response.setRoles(user.getRoles());
         return response;
     }
+    public void updateUser(User user, UserCreateRequest request){
+        user.setFullname(request.getFullname());
+        user.setDob(request.getDob());
+        user.setPhone(request.getPhone());
+        user.setEmail(request.getEmail());
+        user.setAddress(request.getAddress());
+    }
 }
