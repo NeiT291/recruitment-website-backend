@@ -1,33 +1,42 @@
 package org.neit.backend.service;
 
 import org.neit.backend.dto.request.UserCreateRequest;
+import org.neit.backend.dto.response.ResultPaginationResponse;
 import org.neit.backend.dto.response.UserResponse;
+import org.neit.backend.entity.Company;
 import org.neit.backend.entity.Role;
 import org.neit.backend.entity.User;
+import org.neit.backend.mapper.ResultPaginationMapper;
 import org.neit.backend.mapper.UserMapper;
 import org.neit.backend.repository.RoleRepository;
 import org.neit.backend.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
 public class UserService {
 
     private final RoleRepository roleRepository;
-    UserRepository userRepository;
-    UserMapper userMapper;
-    PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
+    private final ResultPaginationMapper resultPaginationMapper;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, RoleRepository roleRepository, ResultPaginationMapper resultPaginationMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
+        this.resultPaginationMapper = resultPaginationMapper;
     }
 
     public UserResponse createUser(UserCreateRequest request) {
@@ -51,7 +60,20 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
+    public UserResponse update(UserCreateRequest request){
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        userMapper.updateUser(user, request);
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResultPaginationResponse getAll(Optional<String> page, Optional<String> pageSize) {
+        String sPage = page.orElse("");
+        String sPageSize = pageSize.orElse("");
+
+        Pageable pageable = PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
+        Page<UserResponse> userPage = userRepository.findAll(pageable).map(userMapper::toUserResponse);
+
+        return resultPaginationMapper.toResultPaginationResponse(userPage);
     }
 }

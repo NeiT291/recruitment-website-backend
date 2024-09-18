@@ -1,38 +1,10 @@
-package org.neit.backend.entity;
+package org.neit.backend.dto.request;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-@Entity
-public class Company {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+public class CompanyRequest {
     private String name;
     private String description;
     private String address;
     private String websiteUrl;
-
-    public Company() {
-    }
-
-    public Company(Integer id, String name, String description, String address, String websiteUrl) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.address = address;
-        this.websiteUrl = websiteUrl;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
