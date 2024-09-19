@@ -75,21 +75,18 @@ public class UserService {
     }
     @PreAuthorize("hasRole('ADMIN')")
     public ResultPaginationResponse getAll(Optional<String> page, Optional<String> pageSize) {
-        String sPage = page.orElse("");
-        String sPageSize = pageSize.orElse("");
-
-        Pageable pageable = PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
+        Pageable pageable = resultPaginationMapper.toPageAble(page, pageSize);
         Page<UserResponse> userPage = userRepository.findAll(pageable).map(userMapper::toUserResponse);
 
         return resultPaginationMapper.toResultPaginationResponse(userPage);
     }
     @PreAuthorize("hasRole('ADMIN')")
     public ResultPaginationResponse getAllHr(String companyName, Optional<String> page, Optional<String> pageSize) {
-        String sPage = page.orElse("");
-        String sPageSize = pageSize.orElse("");
+        Pageable pageable = resultPaginationMapper.toPageAble(page, pageSize);
+        Page<UserResponse> userPage = userRepository
+                .findByCompanyNameIgnoreCaseContaining(companyName, pageable)
+                .map(userMapper::toUserResponse);
 
-        Pageable pageable = PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
-        Page<UserResponse> userPage = userRepository.findByCompanyNameIgnoreCaseContaining(companyName, pageable).map(userMapper::toUserResponse);
         return resultPaginationMapper.toResultPaginationResponse(userPage);
     }
     @PreAuthorize("hasRole('ADMIN')")

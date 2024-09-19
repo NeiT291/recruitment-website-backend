@@ -44,9 +44,7 @@ public class CompanyService {
         companyRepository.deleteById(id);
     }
     public ResultPaginationResponse getByName(String request, Optional<String> page, Optional<String> pageSize){
-        String sPage = page.orElse("");
-        String sPageSize = pageSize.orElse("10");
-        Pageable pageable = PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
+        Pageable pageable = resultPaginationMapper.toPageAble(page, pageSize);
 
         String[] words = request.split(" ");
         request = String.join(" ", words);
@@ -56,10 +54,7 @@ public class CompanyService {
         return resultPaginationMapper.toResultPaginationResponse(companyPage);
     }
     public ResultPaginationResponse getAll(Optional<String> page, Optional<String> pageSize){
-        String sPage = page.orElse("");
-        String sPageSize = pageSize.orElse("10");
-
-        Pageable pageable = PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
+        Pageable pageable = resultPaginationMapper.toPageAble(page, pageSize);
         Page<Company> companyPage = companyRepository.findAll(pageable);
 
         return resultPaginationMapper.toResultPaginationResponse(companyPage);

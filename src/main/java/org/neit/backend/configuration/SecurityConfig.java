@@ -26,6 +26,7 @@ public class SecurityConfig {
             "/api/v1/users/**",
             "/api/v1/auth/**",
             "/api/v1/companies/**",
+            "/api/v1/test/**"
 
     };
 
