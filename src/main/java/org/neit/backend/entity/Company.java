@@ -1,9 +1,8 @@
 package org.neit.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Company {
@@ -14,6 +13,9 @@ public class Company {
     private String description;
     private String address;
     private String websiteUrl;
+
+    @OneToMany
+    private List<User> users;
 
     public Company() {
     }
@@ -64,5 +66,13 @@ public class Company {
 
     public void setWebsiteUrl(String websiteUrl) {
         this.websiteUrl = websiteUrl;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

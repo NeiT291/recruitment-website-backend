@@ -1,56 +1,20 @@
-package org.neit.backend.entity;
+package org.neit.backend.dto.request;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-@Entity
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
-    @Column(unique = true, nullable = false)
+public class UserHrCreationRequest {
     private String username;
+
+    @Size(min = 8)
     private String password;
     private String fullname;
     private LocalDate dob;
-    @Column(unique=true)
     private String email;
     private String phone;
     private String address;
-
-    @ManyToMany
-    private Set<Role> roles;
-
-    @ManyToOne
-    private Company company;
-
-    public User() {
-    }
-
-    public User(String id, String username, String password, String fullname, LocalDate dob, String email, String phone, String address, Set<Role> roles, Company company) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
-        this.dob = dob;
-        this.email = email;
-        this.phone = phone;
-        this.address = address;
-        this.roles = roles;
-        this.company = company;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    private String company;
 
     public String getUsername() {
         return username;
@@ -108,19 +72,11 @@ public class User {
         this.address = address;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public Company getCompany() {
+    public String getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(String company) {
         this.company = company;
     }
 }
