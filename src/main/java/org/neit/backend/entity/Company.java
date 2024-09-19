@@ -14,8 +14,6 @@ public class Company {
     private String address;
     private String websiteUrl;
 
-    @OneToMany
-    private List<User> users;
 
     public Company() {
     }
@@ -66,13 +64,5 @@ public class Company {
 
     public void setWebsiteUrl(String websiteUrl) {
         this.websiteUrl = websiteUrl;
-    }
-
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 }
