@@ -10,6 +10,8 @@ import org.neit.backend.dto.request.LoginRequest;
 import org.neit.backend.dto.response.AuthenticationResponse;
 import org.neit.backend.dto.response.IntrospectResponse;
 import org.neit.backend.entity.User;
+import org.neit.backend.exception.AppException;
+import org.neit.backend.exception.ErrorCode;
 import org.neit.backend.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +44,12 @@ public class AuthenticationService {
 
     public AuthenticationResponse authenticate(LoginRequest request){
         User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
 
         boolean authenticated =  passwordEncoder.matches(request.getPassword(), user.getPassword());
 
         if(!authenticated){
-            throw new RuntimeException();
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         var token = generateToken(user);
         AuthenticationResponse response = new AuthenticationResponse();
@@ -84,7 +86,7 @@ public class AuthenticationService {
             return jwsObject.serialize();
         } catch (JOSEException e) {
             log.error("cannot create token", e);
-            throw new RuntimeException(e);
+            throw new AppException(ErrorCode.INVALID_KEY);
         }
     }
     private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
@@ -95,7 +97,7 @@ public class AuthenticationService {
         var verified = signedJWT.verify(verifier);
 
         if (!(verified && expTime.after(new Date())))
-            throw new RuntimeException();
+            throw new AppException(ErrorCode.TOKEN_INVALID);
 
         return signedJWT;
     }

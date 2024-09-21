@@ -20,8 +20,8 @@ public class ResultPaginationMapper {
         return response;
     }
     public Pageable toPageAble(Optional<String> page, Optional<String> pageSize){
-        String sPage = page.orElse("");
-        String sPageSize = pageSize.orElse("");
+        String sPage = page.orElse("1");
+        String sPageSize = pageSize.orElse("10");
 
         return PageRequest.of(Integer.parseInt(sPage) - 1, Integer.parseInt(sPageSize));
     }

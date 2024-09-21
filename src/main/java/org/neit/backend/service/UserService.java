@@ -7,6 +7,8 @@ import org.neit.backend.dto.response.UserResponse;
 import org.neit.backend.entity.Company;
 import org.neit.backend.entity.Role;
 import org.neit.backend.entity.User;
+import org.neit.backend.exception.AppException;
+import org.neit.backend.exception.ErrorCode;
 import org.neit.backend.mapper.ResultPaginationMapper;
 import org.neit.backend.mapper.UserMapper;
 import org.neit.backend.repository.CompanyRepository;
@@ -56,7 +58,7 @@ public class UserService {
     public UserResponse createUserHr(UserHrCreationRequest request) {
         User user = userMapper.toUser(request);
         user.setCompany(companyRepository.findByName(request.getCompany())
-                .orElseThrow());
+                .orElseThrow(() -> new AppException(ErrorCode.COMPANY_NOT_FOUND)));
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         Set<Role> roles = new HashSet<>();
@@ -68,8 +70,8 @@ public class UserService {
 
     @PreAuthorize("hasRole('USER') || hasRole('ADMIN') || hasRole('HR')" )
     public UserResponse update(UserHrCreationRequest request){
-        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        user.setCompany(companyRepository.findByName(request.getCompany()).orElseThrow());
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+        user.setCompany(companyRepository.findByName(request.getCompany()).orElseThrow(() -> new AppException(ErrorCode.COMPANY_NOT_FOUND)));
         userMapper.updateUser(user, request);
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -91,7 +93,7 @@ public class UserService {
     }
     @PreAuthorize("hasRole('ADMIN')")
     public void delete(String username){
-        User user = userRepository.findByUsername(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
         userRepository.deleteById(user.getId());
     }
 }
