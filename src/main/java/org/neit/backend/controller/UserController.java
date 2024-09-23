@@ -1,6 +1,7 @@
 package org.neit.backend.controller;
 
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.neit.backend.dto.ApiResponse;
 import org.neit.backend.dto.request.UserCreateRequest;
 import org.neit.backend.dto.request.UserHrCreationRequest;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserService userService;

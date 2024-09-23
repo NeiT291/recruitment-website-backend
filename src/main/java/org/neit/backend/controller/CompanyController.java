@@ -1,5 +1,6 @@
 package org.neit.backend.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.neit.backend.dto.ApiResponse;
 import org.neit.backend.dto.request.CompanyRequest;
 import org.neit.backend.dto.response.CompanyResponse;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/companies")
+@SecurityRequirement(name = "bearerAuth")
 public class CompanyController {
     private final CompanyService companyService;
 
