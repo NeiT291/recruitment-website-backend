@@ -22,13 +22,18 @@ public class User {
     private String phone;
     private String address;
 
+    private String avatarPath;
+
     @ManyToMany
     private Set<Role> roles;
+
+    @ManyToOne
+    private Company company;
 
     public User() {
     }
 
-    public User(String id, String username, String password, String fullname, LocalDate dob, String email, String phone, String address, Set<Role> roles) {
+    public User(String id, String username, String password, String fullname, LocalDate dob, String email, String phone, String address, String avatarPath, Set<Role> roles, Company company) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -37,7 +42,9 @@ public class User {
         this.email = email;
         this.phone = phone;
         this.address = address;
+        this.avatarPath = avatarPath;
         this.roles = roles;
+        this.company = company;
     }
 
     public String getId() {
@@ -110,5 +117,21 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
     }
 }

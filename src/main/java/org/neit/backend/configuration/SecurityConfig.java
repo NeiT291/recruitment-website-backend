@@ -15,6 +15,9 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -26,6 +29,14 @@ public class SecurityConfig {
             "/api/v1/users/**",
             "/api/v1/auth/**",
             "/api/v1/companies/**",
+            "/api/v1/test/**",
+            "/api/v1/jobs/**",
+            "/swagger-ui.html",
+            "/swagger-resources/**",
+            "/v2/api-docs/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/webjars/**"
 
     };
 
@@ -42,6 +53,7 @@ public class SecurityConfig {
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer -> jwtConfigurer.decoder(jwtDecoder())
                                 .jwtAuthenticationConverter(jwtConverter()))
+                                .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
 
         );
 
@@ -64,6 +76,18 @@ public class SecurityConfig {
                 .withSecretKey(secretKeySpec)
                 .macAlgorithm(MacAlgorithm.HS512)
                 .build();
+    }
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+
+        return new CorsFilter(source);
     }
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -1,21 +1,20 @@
-package org.neit.backend.dto.response;
+package org.neit.backend.dto.request;
 
 import jakarta.validation.constraints.Size;
-import org.neit.backend.entity.Company;
-import org.neit.backend.entity.Role;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-public class UserResponse {
+public class UserHrCreationRequest {
     private String username;
+
+    @Size(min = 8)
+    private String password;
     private String fullname;
     private LocalDate dob;
     private String email;
     private String phone;
     private String address;
-    private Company companny;
-    private Set<Role> roles;
+    private String company;
 
     public String getUsername() {
         return username;
@@ -23,6 +22,14 @@ public class UserResponse {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getFullname() {
@@ -65,19 +72,11 @@ public class UserResponse {
         this.address = address;
     }
 
-    public Company getCompanny() {
-        return companny;
+    public String getCompany() {
+        return company;
     }
 
-    public void setCompanny(Company companny) {
-        this.companny = companny;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public void setCompany(String company) {
+        this.company = company;
     }
 }
