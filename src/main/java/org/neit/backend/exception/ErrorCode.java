@@ -13,8 +13,8 @@ public enum ErrorCode {
     UNAUTHENTICATED(1008, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     TOKEN_INVALID(1009, "Token is invalid", HttpStatus.BAD_REQUEST),
     ACCESS_DENIED(1009, "You do not have permission", HttpStatus.FORBIDDEN),
-    DOB_INVALID(1010, "Invalid date of birth", HttpStatus.BAD_REQUEST)
-    ,
+    DOB_INVALID(1010, "Invalid date of birth", HttpStatus.BAD_REQUEST),
+    CANNOT_UPLOAD_IMAGE(1011, "Can't upload image", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

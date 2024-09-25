@@ -10,8 +10,14 @@ import org.neit.backend.dto.response.UserResponse;
 import org.neit.backend.repository.RoleRepository;
 import org.neit.backend.service.AuthenticationService;
 import org.neit.backend.service.UserService;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -72,5 +78,20 @@ public class UserController {
         userService.delete(username);
         response.setMessage("Delete user successful");
         return response;
+    }
+    @PostMapping("/avatar")
+    public ApiResponse<?> uploadAvatar(@RequestParam("file") MultipartFile file) throws IOException {
+        userService.uploadAvatar(file);
+        return new ApiResponse<>();
+    }
+    @GetMapping("/avatar")
+    public ResponseEntity<?> downloadAvatar(@RequestParam("username") String username) throws IOException {
+
+        byte[] image = userService.getAvatar(username);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(image);
     }
 }
