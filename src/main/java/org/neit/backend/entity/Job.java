@@ -29,11 +29,11 @@ public class Job {
 
     @ManyToOne
     private User user;
-
+    private boolean isActive = true;
     public Job() {
     }
 
-    public Job(Integer id, String name, String description, String address, int experience, float min_wage, float max_wage, float wage, LocalDate deadline, Company company, Set<City> cities, User user) {
+    public Job(Integer id, String name, String description, String address, int experience, float min_wage, float max_wage, float wage, LocalDate deadline, Company company, Set<City> cities, User user, boolean isActive) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -46,6 +46,7 @@ public class Job {
         this.company = company;
         this.cities = cities;
         this.user = user;
+        this.isActive = isActive;
     }
 
     public Integer getId() {
@@ -142,5 +143,13 @@ public class Job {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

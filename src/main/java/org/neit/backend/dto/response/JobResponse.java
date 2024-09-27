@@ -22,6 +22,25 @@ public class JobResponse {
 
     private Set<City> cities;
 
+    private String user_created;
+    private boolean isActive;
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public String getUser_created() {
+        return user_created;
+    }
+
+    public void setUser_created(String user_created) {
+        this.user_created = user_created;
+    }
+
     public String getName() {
         return name;
     }
