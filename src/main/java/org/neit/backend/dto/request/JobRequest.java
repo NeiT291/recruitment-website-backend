@@ -3,7 +3,7 @@ package org.neit.backend.dto.request;
 import java.time.LocalDate;
 import java.util.Set;
 
-public class JobCreateRequest {
+public class JobRequest {
     private String name;
     private String description;
     private String address;
@@ -18,8 +18,6 @@ public class JobCreateRequest {
     private String company;
 
     private Set<String> cities;
-
-    private String user;
 
     public String getName() {
         return name;
@@ -101,11 +99,4 @@ public class JobCreateRequest {
         this.cities = cities;
     }
 
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
 }

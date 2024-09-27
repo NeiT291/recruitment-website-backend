@@ -1,14 +1,25 @@
 package org.neit.backend.mapper;
 
-import org.neit.backend.dto.request.JobCreateRequest;
+import org.neit.backend.dto.request.JobRequest;
 import org.neit.backend.dto.response.JobResponse;
 import org.neit.backend.entity.Job;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JobMapper {
-    public Job toJob(JobCreateRequest request){
+    public Job toJob(JobRequest request){
         Job job = new Job();
+        job.setName(request.getName());
+        job.setDescription(request.getDescription());
+        job.setAddress(request.getAddress());
+        job.setExperience(request.getExperience());
+        job.setMin_wage(request.getMin_wage());
+        job.setMax_wage(request.getMax_wage());
+        job.setWage(request.getWage());
+        job.setDeadline(request.getDeadline());
+        return job;
+    }
+    public Job updateJob(Job job,JobRequest request){
         job.setName(request.getName());
         job.setDescription(request.getDescription());
         job.setAddress(request.getAddress());
@@ -31,6 +42,8 @@ public class JobMapper {
         jobResponse.setDeadline(job.getDeadline());
         jobResponse.setCompany(job.getCompany());
         jobResponse.setCities(job.getCities());
+        jobResponse.setUser_created(job.getUser().getUsername());
+        jobResponse.setActive(job.isActive());
         return jobResponse;
     }
 }
