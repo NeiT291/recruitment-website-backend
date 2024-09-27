@@ -1,7 +1,7 @@
 package org.neit.backend.controller;
 
 import org.neit.backend.dto.ApiResponse;
-import org.neit.backend.dto.request.JobCreateRequest;
+
 import org.neit.backend.dto.request.ResumeRequest;
 import org.neit.backend.dto.response.JobResponse;
 import org.neit.backend.entity.Resume;
