@@ -15,9 +15,5 @@ import java.util.Set;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
     Page<Job> findByUser(User user, Pageable pageable);
-    List<Job> findByNameIgnoreCaseContaining(String name);
-    Page<Job> findByCitiesIgnoreCaseContaining(Set<City> cities, Pageable pageable);
-    Page<Job> findByNameAndCitiesIgnoreCaseContaining(String name, Set<City> cities, Pageable pageable);
-    Page<Job> findByNameContainingIgnoreCaseAndCitiesContainingAndCompany(String name, Set<City> cities, Company company, Pageable pageable);
-    List<Job> findByNameIgnoreCase(String name);
+
 }

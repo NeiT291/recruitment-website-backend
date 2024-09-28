@@ -32,6 +32,7 @@ public class JobMapper {
     }
     public JobResponse toJobResponse(Job job){
         JobResponse jobResponse = new JobResponse();
+        jobResponse.setId(job.getId());
         jobResponse.setName(job.getName());
         jobResponse.setDescription(job.getDescription());
         jobResponse.setAddress(job.getAddress());

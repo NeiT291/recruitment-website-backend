@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 public class JobResponse {
+    private Integer id;
     private String name;
     private String description;
     private String address;
@@ -27,6 +28,14 @@ public class JobResponse {
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setActive(boolean active) {

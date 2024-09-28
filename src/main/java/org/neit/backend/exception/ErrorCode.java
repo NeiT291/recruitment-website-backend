@@ -16,8 +16,10 @@ public enum ErrorCode {
     DOB_INVALID(1010, "Invalid date of birth", HttpStatus.BAD_REQUEST),
     CANNOT_UPLOAD_IMAGE(1011, "Can't upload image", HttpStatus.BAD_REQUEST),
     JOB_NOT_FOUND(1012, "Job not found", HttpStatus.NOT_FOUND),
-    DEADLINE_RECEDED(1013, "Deadline received", HttpStatus.BAD_REQUEST),
     CITY_NOT_FOUND(1014, "City not found", HttpStatus.NOT_FOUND),
+    RESUME_NOT_FOUND(1015, "Resume not found", HttpStatus.NOT_FOUND),
+    FILE_NOT_FOUND(1016, "File not found", HttpStatus.NOT_FOUND),
+    DEADLINE_EXPIRED(1017, "Deadline expired", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

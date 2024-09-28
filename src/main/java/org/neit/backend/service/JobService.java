@@ -53,7 +53,7 @@ public class JobService {
         Job job = jobMapper.toJob(request);
 
         if(job.getDeadline().isBefore(LocalDate.now())){
-            throw new AppException(ErrorCode.DEADLINE_RECEDED);
+            throw new AppException(ErrorCode.DEADLINE_EXPIRED);
         }
 
         job.setCompany(companyRepository.findByName(request.getCompany()).orElseThrow());
