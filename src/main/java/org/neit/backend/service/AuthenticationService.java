@@ -89,7 +89,7 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.INVALID_KEY);
         }
     }
-    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+    private void verifyToken(String token) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY);
 
         SignedJWT signedJWT = SignedJWT.parse(token);
@@ -99,7 +99,6 @@ public class AuthenticationService {
         if (!(verified && expTime.after(new Date())))
             throw new AppException(ErrorCode.TOKEN_INVALID);
 
-        return signedJWT;
     }
     private String getRole(User user){
         StringJoiner stringJoiner = new StringJoiner(" ");

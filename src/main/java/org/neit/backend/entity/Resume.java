@@ -3,26 +3,25 @@ package org.neit.backend.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Entity
 public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @OneToMany
-    private Set<User> user;
-    private LocalDate createdDate;
     @ManyToOne
-    private Company company;
+    private User user;
+    private LocalDate createdDate = LocalDate.now();
+
+    @ManyToOne
+    private Job job;
     private String resumePath;
     public Resume(){}
 
-    public Resume(Integer id, Set<User> user, LocalDate createdDate, Company company, String resumePath) {
+    public Resume(Integer id, User user, LocalDate createdDate, String resumePath) {
         this.id = id;
         this.user = user;
         this.createdDate = createdDate;
-        this.company = company;
         this.resumePath = resumePath;
     }
 
@@ -34,12 +33,20 @@ public class Resume {
         this.id = id;
     }
 
-    public Set<User> getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(Set<User> user) {
+    public void setUser(User user) {
         this.user = user;
+    }
+
+    public Job getJob() {
+        return job;
+    }
+
+    public void setJob(Job job) {
+        this.job = job;
     }
 
     public LocalDate getCreatedDate() {
@@ -48,14 +55,6 @@ public class Resume {
 
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
     }
 
     public String getResumePath() {

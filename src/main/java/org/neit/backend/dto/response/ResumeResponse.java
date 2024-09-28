@@ -1,25 +1,51 @@
 package org.neit.backend.dto.response;
 
-import org.neit.backend.entity.Company;
-import org.neit.backend.entity.User;
+import java.time.LocalDate;
 
 public class ResumeResponse {
-    private User user;
-    private Company company;
+    private Integer id;
+    private String userCreated;
+    private String company;
+    private String job_name;
+    private LocalDate createdDate;
 
-    public User getUser() {
-        return user;
+    public Integer getId() {
+        return id;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public Company getCompany() {
+    public String getUserCreated() {
+        return userCreated;
+    }
+
+    public void setUserCreated(String userCreated) {
+        this.userCreated = userCreated;
+    }
+
+    public String getJob_name() {
+        return job_name;
+    }
+
+    public void setJob_name(String job_name) {
+        this.job_name = job_name;
+    }
+
+    public String getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(String company) {
         this.company = company;
+    }
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 }
