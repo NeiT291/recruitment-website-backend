@@ -20,6 +20,7 @@ public enum ErrorCode {
     RESUME_NOT_FOUND(1015, "Resume not found", HttpStatus.NOT_FOUND),
     FILE_NOT_FOUND(1016, "File not found", HttpStatus.NOT_FOUND),
     DEADLINE_EXPIRED(1017, "Deadline expired", HttpStatus.BAD_REQUEST),
+    REQUEST_FAILED(1018, "Request failed", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;
