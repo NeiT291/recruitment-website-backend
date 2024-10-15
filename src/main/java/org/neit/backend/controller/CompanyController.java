@@ -8,8 +8,12 @@ import org.neit.backend.dto.response.ResultPaginationResponse;
 import org.neit.backend.service.CompanyService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,5 +63,35 @@ public class CompanyController {
         ApiResponse<ResultPaginationResponse> response = new ApiResponse<>();
         response.setData(companyService.getAll(page, pageSize));
         return response;
+    }
+    @PostMapping("/avatar")
+    public ApiResponse<?> uploadAvatar(Integer id, @RequestParam("file") MultipartFile file) throws IOException {
+        companyService.uploadAvatar(id, file);
+        return new ApiResponse<>();
+    }
+    @GetMapping("/avatar")
+    public ResponseEntity<?> downloadAvatar(@RequestParam Integer id) throws IOException {
+
+        byte[] image = companyService.getAvatar(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(image);
+    }
+    @PostMapping("/banner")
+    public ApiResponse<?> uploadBanner(Integer id, @RequestParam("file") MultipartFile file) throws IOException {
+        companyService.uploadBanner(id, file);
+        return new ApiResponse<>();
+    }
+    @GetMapping("/banner")
+    public ResponseEntity<?> downloadBanner(@RequestParam Integer id) throws IOException {
+
+        byte[] image = companyService.getBanner(id);
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_PNG)
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(image);
     }
 }

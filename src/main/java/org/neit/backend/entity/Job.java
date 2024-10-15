@@ -11,6 +11,7 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+
     private String description;
     private String address;
     private int experience;
@@ -20,6 +21,9 @@ public class Job {
     private float wage;
 
     private LocalDate deadline;
+
+    @ManyToOne
+    private Profession profession;
 
     @ManyToOne
     private Company company;
@@ -33,7 +37,7 @@ public class Job {
     public Job() {
     }
 
-    public Job(Integer id, String name, String description, String address, int experience, float min_wage, float max_wage, float wage, LocalDate deadline, Company company, Set<City> cities, User user, boolean isActive) {
+    public Job(Integer id, String name, String description, String address, int experience, float min_wage, float max_wage, float wage, LocalDate deadline, Profession profession, Company company, Set<City> cities, User user, boolean isActive) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -43,10 +47,19 @@ public class Job {
         this.max_wage = max_wage;
         this.wage = wage;
         this.deadline = deadline;
+        this.profession = profession;
         this.company = company;
         this.cities = cities;
         this.user = user;
         this.isActive = isActive;
+    }
+
+    public Profession getProfession() {
+        return profession;
+    }
+
+    public void setProfession(Profession profession) {
+        this.profession = profession;
     }
 
     public Integer getId() {

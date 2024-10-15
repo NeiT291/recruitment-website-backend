@@ -11,10 +11,8 @@ import org.neit.backend.exception.AppException;
 import org.neit.backend.exception.ErrorCode;
 import org.neit.backend.mapper.JobMapper;
 import org.neit.backend.mapper.ResultPaginationMapper;
-import org.neit.backend.repository.CityRepository;
-import org.neit.backend.repository.CompanyRepository;
-import org.neit.backend.repository.JobRepository;
-import org.neit.backend.repository.UserRepository;
+import org.neit.backend.mapper.UserMapper;
+import org.neit.backend.repository.*;
 import org.neit.backend.utils.TokenInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,9 +35,11 @@ public class JobService {
     private final UserRepository userRepository;
     private final ResultPaginationMapper resultPaginationMapper;
     private final TokenInfo tokenInfo;
+    private final ProfessionRepository professionRepository;
+    private final UserMapper userMapper;
 
 
-    public JobService(JobRepository jobRepository, JobMapper jobMapper, CompanyRepository companyRepository, CityRepository cityRepository, UserRepository userRepository, ResultPaginationMapper resultPaginationMapper, TokenInfo tokenInfo) {
+    public JobService(JobRepository jobRepository, JobMapper jobMapper, CompanyRepository companyRepository, CityRepository cityRepository, UserRepository userRepository, ResultPaginationMapper resultPaginationMapper, TokenInfo tokenInfo, ProfessionRepository professionRepository, UserMapper userMapper) {
         this.jobRepository = jobRepository;
         this.jobMapper = jobMapper;
         this.companyRepository = companyRepository;
@@ -47,6 +47,8 @@ public class JobService {
         this.userRepository = userRepository;
         this.resultPaginationMapper = resultPaginationMapper;
         this.tokenInfo = tokenInfo;
+        this.professionRepository = professionRepository;
+        this.userMapper = userMapper;
     }
 
     public JobResponse create(JobRequest request) {
@@ -56,7 +58,10 @@ public class JobService {
             throw new AppException(ErrorCode.DEADLINE_EXPIRED);
         }
 
-        job.setCompany(companyRepository.findByName(request.getCompany()).orElseThrow());
+        job.setCompany(companyRepository.findByName(request.getCompany()).orElseThrow(() ->
+                new AppException(ErrorCode.COMPANY_NOT_FOUND)));
+        job.setProfession(professionRepository.findByName(request.getProfession()).orElseThrow(() ->
+                new AppException(ErrorCode.PROFESSION_NOT_FOUND)));
         Set<City> cities = new HashSet<>();
         request.getCities().forEach(city -> {
             cities.add(cityRepository.findByName(city).orElseThrow(() ->
@@ -71,9 +76,11 @@ public class JobService {
         Job job = jobRepository.findById(id).orElseThrow();
         jobMapper.updateJob(job, request);
 
-        if(job.getDeadline().isBefore(LocalDate.now())){
+        if(request.getDeadline().isBefore(LocalDate.now())){
             throw new RuntimeException();
         }
+        job.setProfession(professionRepository.findByName(request.getProfession()).orElseThrow(() ->
+                new AppException(ErrorCode.PROFESSION_NOT_FOUND)));
         Set<City> cities = new HashSet<>();
         request.getCities().forEach(city -> {
             cities.add(cityRepository.findByName(city).orElseThrow(() ->
@@ -91,7 +98,12 @@ public class JobService {
         job.setActive(false);
         jobRepository.save(job);
     }
-
+    public JobResponse getById(Integer id) {
+        Job job = jobRepository.findById(id).orElseThrow(() ->
+                new AppException(ErrorCode.JOB_NOT_FOUND)
+        );
+        return jobMapper.toJobResponse(job);
+    }
     public ResultPaginationResponse getAllByUser(Optional<String> page, Optional<String> pageSize){
         User user = userRepository.findByUsername(tokenInfo.getUsername()).orElseThrow(() ->
                 new AppException(ErrorCode.USER_NOT_FOUND)
@@ -104,6 +116,7 @@ public class JobService {
     public ResultPaginationResponse getAll(String name,
                                            String city,
                                            String company,
+                                           String profession,
                                            Integer min_wage,
                                            Integer max_wage,
                                            Integer wage,
@@ -129,21 +142,46 @@ public class JobService {
                     !job.getCompany().getName().toLowerCase().contains(finalCompany.toLowerCase())
             );
         }
+        if(profession != null){
+            String finalProfession = String.join(" ", profession.split(" "));
+            jobs.removeIf(job ->
+                    !job.getProfession().getName().equals(finalProfession)
+            );
+        }
         if(wage != null){
             jobs.removeIf(job ->
                     job.getWage() != wage
             );
+        }else{
+            if(min_wage != null && max_wage != null){
+                if(min_wage > max_wage){
+                    throw new AppException(ErrorCode.MIN_WAGE_MAX_WAGE_ERROR);
+                }
+            }
+            if(min_wage != null){
+
+                jobs.removeIf(job -> {
+                    if(job.getWage() != 0){
+                        return job.getWage() < min_wage;
+                    };
+                    return job.getMin_wage() < min_wage || job.getMax_wage() < min_wage;
+
+                }
+
+                );
+            }
+            if(max_wage != null){
+                jobs.removeIf(job ->{
+                    if(job.getWage() != 0){
+                        return job.getWage() > max_wage;
+                    };
+                    return job.getMax_wage() > max_wage;
+                }
+
+                );
+            }
         }
-        if(min_wage != null){
-            jobs.removeIf(job ->
-                    job.getMin_wage() < min_wage
-            );
-        }
-        if(max_wage != null){
-            jobs.removeIf(job ->
-                    job.getMax_wage() > max_wage
-            );
-        }
+
 
 
         Pageable pageable = resultPaginationMapper.toPageAble(page, pageSize);

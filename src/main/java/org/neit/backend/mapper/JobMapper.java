@@ -41,8 +41,9 @@ public class JobMapper {
         jobResponse.setMax_wage(job.getMax_wage());
         jobResponse.setWage(job.getWage());
         jobResponse.setDeadline(job.getDeadline());
-        jobResponse.setCompany(job.getCompany());
-        jobResponse.setCities(job.getCities());
+        jobResponse.setCompany(job.getCompany().getName());
+        jobResponse.setCity(job.getCities().iterator().next().getName());
+        jobResponse.setProfession(job.getProfession().getName());
         jobResponse.setUser_created(job.getUser().getUsername());
         jobResponse.setActive(job.isActive());
         return jobResponse;

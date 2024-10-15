@@ -15,5 +15,4 @@ import java.util.Set;
 @Repository
 public interface JobRepository extends JpaRepository<Job, Integer> {
     Page<Job> findByUser(User user, Pageable pageable);
-
 }

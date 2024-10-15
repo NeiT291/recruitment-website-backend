@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface ResumeRepository extends JpaRepository <Resume,Integer>{
     Page<Resume> findAllByUser_Username(String username, Pageable pageable);
     Page<Resume> findAllByJob_Company(Company company, Pageable pageable);
+    Page<Resume> findAllByJob_Id(Integer jobId, Pageable pageable);
 }

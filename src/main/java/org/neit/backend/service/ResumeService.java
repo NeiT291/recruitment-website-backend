@@ -53,7 +53,7 @@ public class ResumeService {
         Resume resume = new Resume();
         Job job = jobRepository.findById(Integer.parseInt(job_id)).orElseThrow(() ->
                 new AppException(ErrorCode.JOB_NOT_FOUND));
-        if(job.getDeadline().isAfter(resume.getCreatedDate())){
+        if(job.getDeadline().isBefore(resume.getCreatedDate())){
             throw new AppException(ErrorCode.DEADLINE_EXPIRED);
         }
         User user = userRepository.findByUsername(tokenInfo.getUsername()).orElseThrow(() ->
@@ -76,7 +76,7 @@ public class ResumeService {
                 .map(resumeMapper::toResumeResponse);
         return resultPaginationMapper.toResultPaginationResponse(userPage);
     }
-    @PreAuthorize("hasRole('HR')")
+    @PreAuthorize("hasAnyRole('HR', 'ADMIN')")
     public ResultPaginationResponse hrGetResumes(Optional<String> page, Optional<String> pageSize) {
         Pageable pageable = resultPaginationMapper.toPageAble(page, pageSize);
         User user = userRepository.findByUsername(tokenInfo.getUsername()).orElseThrow(() ->
@@ -127,5 +127,9 @@ public class ResumeService {
         }
         return resumeFile;
     }
-
+    public ResultPaginationResponse getAllByJob_id(Integer id, Optional<String> page, Optional<String> pageSize) {
+        Pageable pageable = resultPaginationMapper.toPageAble(page, pageSize);
+        Page<Resume> resumePage = resumeRepository.findAllByJob_Id(id, pageable);
+        return resultPaginationMapper.toResultPaginationResponse(resumePage.map(resumeMapper::toResumeResponse));
+    }
 }

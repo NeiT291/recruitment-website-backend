@@ -17,6 +17,12 @@ public class ResultPaginationMapper {
         response.setCurrent_page(resultPage.getNumber());
         response.setTotal_pages(resultPage.getTotalPages());
         response.setData(resultPage.getContent());
+        if(resultPage.hasNext()){
+            response.setNext_pages(response.getCurrent_page() + 1);
+        }
+        if(resultPage.hasPrevious()){
+            response.setPrev_pages(response.getCurrent_page() - 1);
+        }
         return response;
     }
     public Pageable toPageAble(Optional<String> page, Optional<String> pageSize){

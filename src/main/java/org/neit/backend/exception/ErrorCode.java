@@ -21,6 +21,8 @@ public enum ErrorCode {
     FILE_NOT_FOUND(1016, "File not found", HttpStatus.NOT_FOUND),
     DEADLINE_EXPIRED(1017, "Deadline expired", HttpStatus.BAD_REQUEST),
     REQUEST_FAILED(1018, "Request failed", HttpStatus.BAD_REQUEST),
+    PROFESSION_NOT_FOUND(1019, "Profession not found", HttpStatus.NOT_FOUND),
+    MIN_WAGE_MAX_WAGE_ERROR(1019, "min wage must be lower max wage", HttpStatus.BAD_REQUEST),
     ;
     private int code;
     private String message;

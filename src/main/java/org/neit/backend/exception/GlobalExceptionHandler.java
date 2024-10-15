@@ -24,6 +24,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = AccessDeniedException.class)
     public ResponseEntity<ApiResponse> accessDeniedExceptionHandler(AccessDeniedException exception) {
+        System.out.println(exception.getMessage());
         ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
         ApiResponse response = new ApiResponse();
         response.setCode(errorCode.getCode());
@@ -35,6 +36,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse> handlingValidation(MethodArgumentNotValidException exception) {
+        System.out.println(exception.getMessage());
         String enymKey = exception.getFieldError().getDefaultMessage();
         ErrorCode errorCode = ErrorCode.INVALID_KEY;
 
@@ -53,6 +55,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = ParseException.class)
     public ResponseEntity<ApiResponse> handlingParseException(ParseException exception) {
+        System.out.println(exception.getMessage());
         ErrorCode errorCode = ErrorCode.REQUEST_FAILED;
         ApiResponse response = new ApiResponse();
         response.setCode(errorCode.getCode());

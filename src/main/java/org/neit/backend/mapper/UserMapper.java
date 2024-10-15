@@ -39,7 +39,7 @@ public class UserMapper {
         response.setEmail(user.getEmail());
         response.setAddress(user.getAddress());
         response.setRoles(user.getRoles());
-        response.setCompanny(user.getCompany());
+        response.setCompany(user.getCompany());
         return response;
     }
     public void updateUser(User user, UserHrCreationRequest request){
