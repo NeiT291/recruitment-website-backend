@@ -1,10 +1,12 @@
 package org.neit.backend.dto.response;
 
+import org.neit.backend.entity.User;
+
 import java.time.LocalDate;
 
 public class ResumeResponse {
     private Integer id;
-    private String userCreated;
+    private UserResponse userCreated;
     private String company;
     private String job_name;
     private LocalDate createdDate;
@@ -17,11 +19,11 @@ public class ResumeResponse {
         this.id = id;
     }
 
-    public String getUserCreated() {
+    public UserResponse getUserCreated() {
         return userCreated;
     }
 
-    public void setUserCreated(String userCreated) {
+    public void setUserCreated(UserResponse userCreated) {
         this.userCreated = userCreated;
     }
 

@@ -6,12 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.shaded.gson.Gson;
 import com.nimbusds.jose.shaded.gson.reflect.TypeToken;
 import com.nimbusds.jose.shaded.gson.stream.JsonReader;
-import org.neit.backend.entity.City;
-import org.neit.backend.entity.Role;
-import org.neit.backend.entity.User;
-import org.neit.backend.repository.CityRepository;
-import org.neit.backend.repository.RoleRepository;
-import org.neit.backend.repository.UserRepository;
+import org.neit.backend.entity.*;
+import org.neit.backend.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationRunner;
@@ -41,7 +37,7 @@ public class ApplicationInitConfig {
     }
 
     @Bean
-    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository, CityRepository cityRepository){
+    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository, CityRepository cityRepository, CompanyRepository companyRepository, ProfessionRepository professionRepository){
         return args -> {
             if(cityRepository.findAll().isEmpty()){
                 Type CITY_TYPE = new TypeToken<List<City>>() {
@@ -51,6 +47,24 @@ public class ApplicationInitConfig {
                 List<City> cities = gson.fromJson(reader, CITY_TYPE);
                 cityRepository.saveAll(cities);
                 log.info("import cities data from json success");
+            }
+            if(companyRepository.findAll().isEmpty()){
+                Type COMPANY_TYPE = new TypeToken<List<Company>>() {
+                }.getType();
+                Gson gson = new Gson();
+                JsonReader reader = new JsonReader(new FileReader("src/main/resources/data/data-company.json"));
+                List<Company> companies = gson.fromJson(reader, COMPANY_TYPE);
+                companyRepository.saveAll(companies);
+                log.info("import companies data from json success");
+            }
+            if(professionRepository.findAll().isEmpty()){
+                Type PROFESSION_TYPE = new TypeToken<List<Profession>>() {
+                }.getType();
+                Gson gson = new Gson();
+                JsonReader reader = new JsonReader(new FileReader("src/main/resources/data/data-profession.json"));
+                List<Profession> professions = gson.fromJson(reader, PROFESSION_TYPE);
+                professionRepository.saveAll(professions);
+                log.info("import companies data from json success");
             }
 
             for(String roles : DEFAULT_ROLES){

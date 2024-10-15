@@ -24,7 +24,7 @@ public class ResumeController {
         this.resumeService = resumeService;
     }
     @PostMapping
-    public ApiResponse<ResumeResponse> create(@RequestParam String job_id,
+    public ApiResponse<ResumeResponse> create(@RequestParam(name = "id", value = "id") String job_id,
                                               @RequestParam MultipartFile file) throws IOException {
         ApiResponse<ResumeResponse> response = new ApiResponse<>();
         response.setData(resumeService.create(job_id, file));
@@ -42,7 +42,8 @@ public class ResumeController {
         byte[] image = resumeService.getResume(id);
 
         return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
+                .contentType(MediaType.IMAGE_PNG)
+                .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
     }
     @GetMapping
@@ -63,6 +64,15 @@ public class ResumeController {
         ApiResponse<ResultPaginationResponse> response = new ApiResponse<>();
 
         response.setData(resumeService.hrGetResumes(page, pageSize));
+        return response;
+    }
+    @GetMapping("/job")
+    public ApiResponse<ResultPaginationResponse> getByJob_id(   @RequestParam Integer id,
+                                                                @RequestParam Optional<String> page,
+                                                                @RequestParam Optional<String> pageSize){
+        ApiResponse<ResultPaginationResponse> response = new ApiResponse<>();
+
+        response.setData(resumeService.getAllByJob_id(id,page, pageSize));
         return response;
     }
 }

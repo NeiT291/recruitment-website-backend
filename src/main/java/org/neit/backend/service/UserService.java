@@ -148,4 +148,7 @@ public class UserService {
 
         return image;
     }
+    public UserResponse getMyInfo(){
+        return userMapper.toUserResponse(userRepository.findByUsername(tokenInfo.getUsername()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND)));
+    }
 }

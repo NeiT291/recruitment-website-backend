@@ -94,4 +94,10 @@ public class UserController {
                 .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
     }
+    @GetMapping("/my-info")
+    public ApiResponse<UserResponse> getMyInfo() {
+        ApiResponse<UserResponse> response = new ApiResponse<>();
+        response.setData(userService.getMyInfo());
+        return response;
+    }
 }

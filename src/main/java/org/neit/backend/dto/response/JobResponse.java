@@ -2,6 +2,7 @@ package org.neit.backend.dto.response;
 
 import org.neit.backend.entity.City;
 import org.neit.backend.entity.Company;
+import org.neit.backend.entity.Profession;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -16,12 +17,12 @@ public class JobResponse {
     private float min_wage;
     private float max_wage;
     private float wage;
-
+    private String profession;
     private LocalDate deadline;
 
-    private Company company;
+    private String company;
 
-    private Set<City> cities;
+    private String city;
 
     private String user_created;
     private boolean isActive;
@@ -56,6 +57,14 @@ public class JobResponse {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 
     public String getDescription() {
@@ -114,19 +123,19 @@ public class JobResponse {
         this.deadline = deadline;
     }
 
-    public Company getCompany() {
+    public String getCompany() {
         return company;
     }
 
-    public void setCompany(Company company) {
+    public void setCompany(String company) {
         this.company = company;
     }
 
-    public Set<City> getCities() {
-        return cities;
+    public String getCity() {
+        return city;
     }
 
-    public void setCities(Set<City> cities) {
-        this.cities = cities;
+    public void setCity(String city) {
+        this.city = city;
     }
 }

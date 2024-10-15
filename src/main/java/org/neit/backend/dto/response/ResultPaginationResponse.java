@@ -5,7 +5,25 @@ public class ResultPaginationResponse {
     private int total_records_page;
     private int current_page;
     private int total_pages;
+    private int prev_pages;
+    private int next_pages;
     private Object data;
+
+    public int getPrev_pages() {
+        return prev_pages;
+    }
+
+    public void setPrev_pages(int prev_pages) {
+        this.prev_pages = prev_pages;
+    }
+
+    public int getNext_pages() {
+        return next_pages;
+    }
+
+    public void setNext_pages(int next_pages) {
+        this.next_pages = next_pages;
+    }
 
     public long getTotal_records() {
         return total_records;

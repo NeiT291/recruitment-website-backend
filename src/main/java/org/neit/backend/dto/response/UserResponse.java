@@ -1,6 +1,5 @@
 package org.neit.backend.dto.response;
 
-import jakarta.validation.constraints.Size;
 import org.neit.backend.entity.Company;
 import org.neit.backend.entity.Role;
 
@@ -14,7 +13,7 @@ public class UserResponse {
     private String email;
     private String phone;
     private String address;
-    private Company companny;
+    private Company company;
     private Set<Role> roles;
 
     public String getUsername() {
@@ -65,12 +64,12 @@ public class UserResponse {
         this.address = address;
     }
 
-    public Company getCompanny() {
-        return companny;
+    public Company getCompany() {
+        return company;
     }
 
-    public void setCompanny(Company companny) {
-        this.companny = companny;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Set<Role> getRoles() {

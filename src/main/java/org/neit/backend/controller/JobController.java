@@ -5,6 +5,7 @@ import org.neit.backend.dto.ApiResponse;
 import org.neit.backend.dto.request.JobRequest;
 import org.neit.backend.dto.response.JobResponse;
 import org.neit.backend.dto.response.ResultPaginationResponse;
+import org.neit.backend.entity.Job;
 import org.neit.backend.service.JobService;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class JobController {
         return response;
     }
     @PutMapping("/{id}")
-    public ApiResponse<JobResponse> update(@RequestParam Integer id,@RequestBody JobRequest request) {
+    public ApiResponse<JobResponse> update(@PathVariable Integer id,@RequestBody JobRequest request) {
         ApiResponse<JobResponse> response = new ApiResponse<>();
         response.setData(jobService.update(id, request));
         return response;
@@ -39,6 +40,12 @@ public class JobController {
     public ApiResponse<?> delete(@RequestParam Integer id) {
         ApiResponse<?> response = new ApiResponse<>();
         jobService.delete(id);
+        return response;
+    }
+    @GetMapping
+    public  ApiResponse<JobResponse> getById(@RequestParam Integer id) {
+        ApiResponse<JobResponse> response = new ApiResponse<>();
+        response.setData(jobService.getById(id));
         return response;
     }
     @GetMapping("/search/my-job")
@@ -51,6 +58,7 @@ public class JobController {
     public ApiResponse<ResultPaginationResponse> getByName(@RequestParam(required = false) String name,
                                                            @RequestParam(required = false) String city,
                                                            @RequestParam(required = false) String company,
+                                                           @RequestParam(required = false) String profession,
                                                            @RequestParam(required = false) Integer min_wage,
                                                            @RequestParam(required = false) Integer max_wage,
                                                            @RequestParam(required = false) Integer wage,
@@ -58,7 +66,7 @@ public class JobController {
                                                            @RequestParam Optional<String> pageSize){
         ApiResponse<ResultPaginationResponse> response = new ApiResponse<>();
 
-        response.setData(jobService.getAll(name, city, company, min_wage, max_wage, wage, page, pageSize));
+        response.setData(jobService.getAll(name, city, company,profession, min_wage, max_wage, wage, page, pageSize));
 
         return response;
     }

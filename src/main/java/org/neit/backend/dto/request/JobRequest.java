@@ -14,7 +14,7 @@ public class JobRequest {
     private float wage;
 
     private LocalDate deadline;
-
+    private String profession;
     private String company;
 
     private Set<String> cities;
@@ -45,6 +45,14 @@ public class JobRequest {
 
     public int getExperience() {
         return experience;
+    }
+
+    public String getProfession() {
+        return profession;
+    }
+
+    public void setProfession(String profession) {
+        this.profession = profession;
     }
 
     public void setExperience(int experience) {
