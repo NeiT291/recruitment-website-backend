@@ -12,6 +12,7 @@ public class Job {
     private Integer id;
     private String name;
 
+    @Column(columnDefinition = "longtext")
     private String description;
     private String address;
     private int experience;
